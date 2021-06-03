@@ -103,12 +103,12 @@ def encrypt(x, keys):
     print("Random k = %d" % k)
 
     gamma = pow(alpha, k, p)
-    print(" δ = x * β ^ k mod p = %d" % gamma)
+    print(" γ = x * β ^ k mod p = %d" % gamma)
 
     delta = (x*pow(beta, k, p)) % p
-    print(" γ = a^k mod p = %d" % delta)
+    print(" δ = a^k mod p = %d" % delta)
 
-    print("Cyphertext: (γ,δ) = (%d, %d)" % (gamma, delta))
+    print("Cyphertext: (γ, δ) = (%d, %d)" % (gamma, delta))
     return (gamma, delta)
 
 

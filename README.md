@@ -11,6 +11,11 @@ Câu lệnh: ```python rsa.py [bản rõ] [độ lớn]``` \
 Ví dụ: \
 ```python rsa.py 131323245 512``` \
 \\\ tạo hệ mật RSA 512 bit, với bản rõ là 131323245
+#### Elgamal:
+Câu lệnh: ```python elgamal.py [bản rõ] [độ lớn]``` \
+Ví dụ: \
+```python elgamal.py 131323245 160``` \
+\\\ tạo hệ mật Elgamal 512 bit, với bản rõ là 131323245
 ## 1. Hệ mật RSA và chữ ký số
 ### Xây dựng hệ mật:
 * Chọn 2 số nguyên tố lớn p và q với p ≠ q, lựa chọn ngẫu nhiên và độc lập.
@@ -26,5 +31,33 @@ Ví dụ: \
 Bản rõ : x \
 Bản mã c tính theo công thức: c = m ^ e mod n \
 Giải mã c theo công thức: x = c ^ d mod n
+## 2. Hệ mật Elgamal và chữ ký số
+### Xây dựng hệ mật:
+* Chọn số nguyên tố lớn *p*.
+* Chọn *a* là một số thuộc Zp, *α* là một phần tử nguyên thuỷ của Zp
+* Tính *β = α ^ a mod p*.
+
+* Khóa công khai: *(p, α, β)*
+* Khóa bí mật: *(a)*
+
+### Mã hóa
+Bản rõ : x \
+Chọn số nguyên ngẫu nhiên k \
+Bản mã là *(γ, δ)*, với: \
+*γ = x * β ^ k mod p*\
+*δ = a^k mod p* \
+Giải mã *(γ, δ)* theo công thức: *x = δ * (γ ^ -a) mod p*
+
+### Chữ ký số
+
+Bản rõ : x \
+Chọn số nguyên ngẫu nhiên *k* \
+Chữ ký số là *(γ, δ)*, với: \
+*γ = α ^ k mod p* \
+*δ = (x - a * r) * (k ^ -1 mod (p - 1))* \
+
+Xác thực chữ ký *(γ, δ)* đúng khi: *α^x ≡ (β ^ γ)\* (γ ^ δ) (mod p)*
+
+
 
 
