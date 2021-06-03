@@ -1,6 +1,7 @@
 import sys
 import libnum
 import random
+import time
 
 
 def gcd(a, b):
@@ -65,7 +66,7 @@ if __name__ == '__main__':
     if (len(sys.argv) > 1):
         x = int(sys.argv[1])
         bitsize = int(sys.argv[2])
-
+    time_start = time.time()
     p, q = generate_primes(bitsize)
     N = p*q
     phiN = (p-1)*(q-1)
@@ -73,25 +74,68 @@ if __name__ == '__main__':
     d = findModInverse(e, phiN)
     c = pow(x, e, N)
     _x = pow(c, d, N)
-    print("\nPrime number p: %d Length: %d bits, Digits: %d\n" %
-          (p, libnum.len_in_bits(p), len(str(p))))
-    print("Prime number q: %d Length: %d bits, Digits: %d\n" %
-          (q, libnum.len_in_bits(q), len(str(q))))
-    print("Prime N = p*q: %d. Length: %d bits, Digits: %d\n" %
-          (N, libnum.len_in_bits(N), len(str(N))))
-    print("Φ(N) = (p-1)*(q-1): %d. Length: %d bits, Digits: %d\n" %
-          (phiN, libnum.len_in_bits(phiN), len(str(phiN))))
+
+    print("\nPrime numbers:\n")
+    print("   p: %d" % (p))
+    print("   Length: %d bits, Digits: %d" %
+          (libnum.len_in_bits(p), len(str(p))))
+    print("   q: %d" % (q))
+    print("   Length: %d bits, Digits: %d\n" %
+          (libnum.len_in_bits(q), len(str(q))))
+    print("Prime N:\n")
+    print("   N = p*q = %d." %
+          (N))
+    print("   Length: %d bits, Digits: %d\n" %
+          (libnum.len_in_bits(N), len(str(N))))
+    print("   Φ(N) = (p-1)*(q-1): %d." %
+          (phiN))
+    print("   Length: %d bits, Digits: %d\n" %
+          (libnum.len_in_bits(phiN), len(str(phiN))))
     print("e: %d. Length: %d bits, Digits: %d\n" %
           (e, libnum.len_in_bits(e), len(str(e))))
-    print("d = e^-1 mod N: %d. Length: %d bits, Digits: %d" %
-          (d, libnum.len_in_bits(d), len(str(d))))
+    print("d = e^-1 mod N: %d." %
+          (d))
+    print("Length: %d bits, Digits: %d" %
+          (libnum.len_in_bits(d), len(str(d))))
+
     print('\n-----------------------------------------------------\n')
+
+    print('GENERATE RSA KEY PAIR\n')
+    print("Public key")
+    print("  (e,N): (%d, %d)\n" % (e, N))
+    print("Private key")
+    print("  (d,N): (%d, %d)\n" % (d, N))
+    time_spent = time.time() - time_start
+    print("Spent time: %.3f sec." % time_spent)
+
+    print('-----------------------------------------------------\n')
+
+    print("ENCRYPTION\n")
     print("Plaintext: %d. Length: %d bits, Digits: %d\n" %
           (x, libnum.len_in_bits(x), len(str(x))))
-    print("Public key (e,N): (%d, %d)\n" % (e, N))
-    print("Private key (d,N): (%d, %d)\n" % (d, N))
-    print('-----------------------------------------------------\n')
-    print("Encrypt. Cyphertext: %d. Length: %d bits, Digits: %d\n" %
-          (c, libnum.len_in_bits(c), len(str(c))))
+    time_start = time.time()
+    print("Encrypt - Cyphertext")
+    print("  ", c)
+    print("   Length: %d bits, Digits: %d\n" %
+          (libnum.len_in_bits(c), len(str(c))))
     print("Decrypt. Plaintext: %d. Length: %d bits, Digits: %d\n\n" %
           (_x, libnum.len_in_bits(_x), len(str(_x))))
+    time_spent = time.time() - time_start
+    print("Spent time: %.3f sec." % time_spent)
+
+    print('-----------------------------------------------------\n')
+
+    print("SIGN AND VERIFY\n")
+    print("Plaintext: %d. Length: %d bits, Digits: %d\n" %
+          (x, libnum.len_in_bits(x), len(str(x))))
+    time_start = time.time()
+    s = pow(x, e, N)
+    print('Signature')
+    print("   s = %d" %
+          (s))
+    print("   Length: %d bits, Digits: %d\n" %
+          (libnum.len_in_bits(s), len(str(s))))
+    _s = pow(s, d, N)
+    print("Verification: %s" % ("TRUE" if _s == x else "FALSE"))
+    time_spent = time.time() - time_start
+    print("Spent time: %.3f sec." % time_spent)
