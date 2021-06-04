@@ -54,7 +54,7 @@ Bản rõ : x \
 Chọn số nguyên ngẫu nhiên *k* \
 Chữ ký số là *(γ, δ)*, với: \
 *γ = α ^ k mod p* \
-*δ = (x - a * r) * (k ^ -1 mod (p - 1))* \
+*δ = (x - a * r) * (k ^ -1 mod (p - 1))* 
 
 Xác thực chữ ký *(γ, δ)* đúng khi: *α^x ≡ (β ^ γ)\* (γ ^ δ) (mod p)*
 
