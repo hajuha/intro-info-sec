@@ -75,14 +75,14 @@ if __name__ == '__main__':
     c = pow(x, e, N)
     _x = pow(c, d, N)
 
-    print("\nPrime numbers:\n")
+    print("\nPrime numbers:")
     print("   p: %d" % (p))
     print("   Length: %d bits, Digits: %d" %
           (libnum.len_in_bits(p), len(str(p))))
     print("   q: %d" % (q))
     print("   Length: %d bits, Digits: %d\n" %
           (libnum.len_in_bits(q), len(str(q))))
-    print("Prime N:\n")
+    print("Prime N:")
     print("   N = p*q = %d." %
           (N))
     print("   Length: %d bits, Digits: %d\n" %
@@ -114,8 +114,8 @@ if __name__ == '__main__':
     print("Plaintext: %d. Length: %d bits, Digits: %d\n" %
           (x, libnum.len_in_bits(x), len(str(x))))
     time_start = time.time()
-    print("Encrypt - Cyphertext")
-    print("  ", c)
+    print("Encrypt - Ciphertext")
+    print("   c = x ^ e mod n = ", c)
     print("   Length: %d bits, Digits: %d\n" %
           (libnum.len_in_bits(c), len(str(c))))
     print("Decrypt. Plaintext: %d. Length: %d bits, Digits: %d\n\n" %
@@ -131,11 +131,11 @@ if __name__ == '__main__':
     time_start = time.time()
     s = pow(x, e, N)
     print('Signature')
-    print("   s = %d" %
+    print("   s = x ^ e mod n = %d" %
           (s))
     print("   Length: %d bits, Digits: %d\n" %
           (libnum.len_in_bits(s), len(str(s))))
     _s = pow(s, d, N)
-    print("Verification: %s" % ("TRUE" if _s == x else "FALSE"))
+    print("Verification: _s = s ^ d mod n = %d  %s" % (_s, "TRUE" if _s == x else "FALSE"))
     time_spent = time.time() - time_start
     print("Spent time: %.3f sec." % time_spent)

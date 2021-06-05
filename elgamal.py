@@ -108,15 +108,15 @@ def encrypt(x, keys):
     delta = (x*pow(beta, k, p)) % p
     print(" δ = a^k mod p = %d" % delta)
 
-    print("Cyphertext: (γ, δ) = (%d, %d)" % (gamma, delta))
+    print("Ciphertext: (γ, δ) = (%d, %d)" % (gamma, delta))
     return (gamma, delta)
 
 
-def decrypt(cyphertext, keys, x):
+def decrypt(Ciphertext, keys, x):
     print("------------------------------------")
     print("\nDECRYPTION\n")
     p, alpha, a, beta = keys
-    gamma, delta = cyphertext
+    gamma, delta = Ciphertext
 
     _x = (delta * pow(pow(gamma, a, p), p-2, p)) % p
 
@@ -145,6 +145,8 @@ def verify_signature(signature, keys, x):
     r,s = signature
     v1 = pow(alpha, x, p)
     v2 = pow(beta, r , p) * pow(r, s, p) % p
+    print("right = (β ^ γ)* (γ ^ δ) (mod p) = ", v2)
+    print("left = α^x (mod p) = ", v1)
     print("Verification: %s" % ("TRUE" if v1 == v2 else "FALSE"))
 
 if __name__ == '__main__':
@@ -154,7 +156,7 @@ if __name__ == '__main__':
         x = int(sys.argv[1])
         bitsize = int(sys.argv[2])
     keys = generate_keys()
-    cyphertext = encrypt(x, keys)
-    decrypt(cyphertext, keys, x)
+    Ciphertext = encrypt(x, keys)
+    decrypt(Ciphertext, keys, x)
     signature = sign(x, keys)
     verify_signature(signature, keys, x)
