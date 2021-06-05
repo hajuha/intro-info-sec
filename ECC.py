@@ -4,6 +4,17 @@ import random
 import time
 import hashlib
 from libnum import ecc
+from os import system, name
+
+def clear():
+  
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+  
+    # for mac and linux(here, os.name is 'posix')
+    else:
+        _ = system('clear')
 
 
 def gcd(a, b):
@@ -109,7 +120,7 @@ def generate_elliptic_curve(bitsize):
     return(p, a, b)
 
 
-def find_points_in_range(start, end, curve):
+def find_points_in_range(start, end, curve):    
     p, a, b = curve
     x = start
     points = []
@@ -185,52 +196,52 @@ def gerenate_keys(curve):
 def sign_message(k, private_key, public_key, message, curve):
     p, a, b = curve
     (g, n, Q) = public_key
-    message_hash = hashlib.sha512(message).digest()
-    z = int.from_bytes(message_hash, "big")
+    message_hash = hashlib.sha1(message).digest()
+    h = int.from_bytes(message_hash, "big")
     r = 0
     s = 0
     while not r or not s:
         if k == 0:
             k = random.randrange(1, n - 1)
-        x, _ = scalar_multiply(curve, k, g)  # _:y
-        r = x % n
+        x1, y1 = scalar_multiply(curve, k, g)  # _:y
+        r = x1 % n
         c = findModInverse(k, n)
-        s = ((z + r * private_key) * c) % n
+        s = ((h + r * private_key) * c) % n
     print("\nSIGN:")
 
-    print("  Message: %s" % message)  # 'sigR' in bitcoin transaction.
-    print("  Hash massage: %s" % z)
-    print("  r = x1 mod n = %d" % r)  # 'sigR' in bitcoin transaction.
+    print("  Message: %s" % message) 
+    print("  Hash massage: %s" % h)
+    print("  r = x1 mod n = %d" % r)  
     print("  s = (h + d*r)* (k ^(- 1)) mod n = %d" % s)
-    return (r, s, z)
+    return (r, s, h)
 
 
 def verify_signature(public_key, signature, curve):
     p, a, b = curve
     (g, n, Q) = public_key
-    r, s, z = signature
+    r, s, h = signature
     print("\nVERIFY SIGNATURE:")
     print("  r = %s" % r)
     print("  s = %s" % s)
-    print("  Hash massage: %s\n" % z)
+    print("  Hash massage: %s\n" % h)
     w = findModInverse(s, n)
-    u1 = (z * w) % n
+    u1 = (h * w) % n
     u2 = (r * w) % n
     print("  u1 = hw mod n = %s" % u1)
     print("  u2 = rw mod n = %s" % u2)
-    x, y = point_add(curve, scalar_multiply(curve, u1, g),
+    x0, y0 = point_add(curve, scalar_multiply(curve, u1, g),
                      scalar_multiply(curve, u2, Q)
                      )
-    print("  (x0,y0) = u1g + u2Q = (%d, %d)" % (x, y))
+    print("  (x0,y0) = u1g + u2Q = (%d, %d)" % (x0, y0))
     print("  r mod n = %s" % (r % n))
-    print("  x1 mod n = %s" % (x % n))
-    if (r % n) == (x % n):
+    print("  x1 mod n = %s" % (x0 % n))
+    if (r % n) == (x0 % n):
         return True  # Signature matches!
     else:
         return False  # Invalid signature!
 
-
-message = b'Toi yeu Viet Nam'
+clear()
+message = b'Hoang Duong Hao'
 time_start = time.time()
 bitsize = int(sys.argv[1])
 curve = generate_elliptic_curve(bitsize)

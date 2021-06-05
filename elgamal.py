@@ -2,6 +2,22 @@ import sys
 import libnum
 import random
 import time
+import hashlib
+from os import system, name
+
+def clear():
+  
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+  
+    # for mac and linux(here, os.name is 'posix')
+    else:
+        _ = system('clear')
+
+
+def hash(message):
+    return int.from_bytes(hashlib.sha1(message).digest(), "big")
 
 
 def gcd(a, b):
@@ -92,14 +108,15 @@ def generate_keys():
     return (p, alpha, a, beta)
 
 
-def encrypt(x, keys):
+def encrypt(message, keys):
 
+    p, alpha, a, beta = keys
+    x = hash(message)
+    k = generate_coprime(p-1)
     print("------------------------------------")
     print("\nENCRYPTION\n")
-    print("Plaintext = %d" % x)
-    p, alpha, a, beta = keys
-
-    k = generate_coprime(p-1)
+    print("Plaintext = %s" % message)
+    print("Hash plaintext: x = %s\n" % (x))
     print("Random k = %d" % k)
 
     gamma = pow(alpha, k, p)
@@ -112,51 +129,59 @@ def encrypt(x, keys):
     return (gamma, delta)
 
 
-def decrypt(Ciphertext, keys, x):
+def decrypt(Ciphertext, keys, message):
     print("------------------------------------")
     print("\nDECRYPTION\n")
+    x = hash(message)
     p, alpha, a, beta = keys
     gamma, delta = Ciphertext
-
     _x = (delta * pow(pow(gamma, a, p), p-2, p)) % p
 
-    print("Plaintext = δ * (γ ^ -a) mod p = %d" % x)
+    print("Hash plaintext: %s" % (x))
+    print("Decrypt = δ * (γ ^ -a) mod p = %d" % _x)
     print("Decrypt: %s" % ("SUCCESS" if _x == x else "FALSE"))
 
 
-def sign(x, keys):
+def sign(message, keys):
     print("------------------------------------")
     print("\nSIGN\n")
+    
+    x = hash(message)
     p, alpha, a, beta = keys
     k = generate_coprime(p-1)
+    print("Plaintext = %s" % message)
+    print("Hash plaintext: x = %s\n" % (x))
     print("Random k = %d" % k)
     r = pow(alpha, k, p)
-    print(" r = alpha * k ^ k mod p = %d" % r)
-    
+    print(" r = α * k ^ k mod p = %d" % r)
+
     s = ((x-a*r) * findModInverse(k, p-1)) % (p - 1)
     print(" s = (x - a * r) * (k ^ -1 mod (p - 1)) = %d\n" % s)
-    print("Signature (r,s) = (%d, %d)" % (r,s))
-    return (r,s)
+    print("Signature (r,s) = (%d, %d)" % (r, s))
+    return (r, s)
 
-def verify_signature(signature, keys, x):
+
+def verify_signature(signature, keys, message):
     print("------------------------------------")
     print("\nVERIFY SIGNATURE\n")
+    x = hash(message)
     p, alpha, a, beta = keys
-    r,s = signature
+    r, s = signature
     v1 = pow(alpha, x, p)
-    v2 = pow(beta, r , p) * pow(r, s, p) % p
+    v2 = pow(beta, r, p) * pow(r, s, p) % p
     print("right = (β ^ γ)* (γ ^ δ) (mod p) = ", v2)
     print("left = α^x (mod p) = ", v1)
     print("Verification: %s" % ("TRUE" if v1 == v2 else "FALSE"))
 
+
 if __name__ == '__main__':
+    clear()
     bitsize = 512
-    x = 123
+    message = b'Hoang Duong Hao'
     if (len(sys.argv) > 1):
-        x = int(sys.argv[1])
-        bitsize = int(sys.argv[2])
+        bitsize = int(sys.argv[1])
     keys = generate_keys()
-    Ciphertext = encrypt(x, keys)
-    decrypt(Ciphertext, keys, x)
-    signature = sign(x, keys)
-    verify_signature(signature, keys, x)
+    Ciphertext = encrypt(message, keys)
+    decrypt(Ciphertext, keys, message)
+    signature = sign(message, keys)
+    verify_signature(signature, keys, message)
