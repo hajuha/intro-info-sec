@@ -16,6 +16,11 @@ Câu lệnh: ```python elgamal.py [bản rõ] [độ lớn]``` \
 Ví dụ: \
 ```python elgamal.py 131323245 160``` \
 \\\ tạo hệ mật Elgamal 512 bit, với bản rõ là 131323245
+#### ECC:
+Câu lệnh: ```python ECC.py [độ lớn]``` \
+Ví dụ: \
+```python ECC.py  16``` \
+\\\ tạo hệ mật ECC 16 bit
 ## 1. Hệ mật RSA và chữ ký số
 ### Xây dựng hệ mật:
 * Chọn 2 số nguyên tố lớn p và q với p ≠ q, lựa chọn ngẫu nhiên và độc lập.
@@ -58,6 +63,7 @@ Chữ ký số là *(γ, δ)*, với: \
 
 Xác thực chữ ký *(γ, δ)* đúng khi: *α^x ≡ (β ^ γ)\* (γ ^ δ) (mod p)*
 
-
+## 2. Hệ mật ECC và chữ ký số
+(tham khảo trong docs: https://docs.google.com/document/d/1xPNIYEinPOMsGlE0hadb-afh46sNx1JhdPFv3o83a1U/edit?usp=sharing)
 
 
