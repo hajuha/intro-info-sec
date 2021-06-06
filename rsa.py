@@ -137,30 +137,30 @@ def sign_and_verify(message, bitsize):
     print("B RSA:")
     eB, dB, nB = __generate_keys(bitsize)
 
-    def sign(message, dB, nB, eA, nA):
+    def sign(message, eB, nB, dA, nA):
         x = hash(message)
-        c = pow(x, dB, nB)
-        signature = pow(x, eA, nA)
+        c = pow(x, eB, nB)
+        signature = pow(x, dA, nA)
 
         print("\nSign")
         print("Plaintext: %s" % (message))
         print("Hash plaintext: %s\n" % (x))
-        print("Ciphertext c = x ^ dB mod nB = ", c)
-        print("Signture signature = x ^ eA mod nA = ", signature)
+        print("Ciphertext c = x ^ eB mod nB = ", c)
+        print("Signture signature = x ^ dA mod nA = ", signature)
         return (c, signature)
 
-    c, signature = sign(message, dB, nB, eA, nA)
+    c, signature = sign(message, eB, nB, dA, nA)
 
-    def verify(c, signature, dA, nA, eB, nB):
-        decrypt = pow(c, eB, nB)
-        verify_signature = pow(signature, dA, nA)
+    def verify(c, signature, eA, nA, dB, nB):
+        decrypt = pow(c, dB, nB)
+        verify_signature = pow(signature, eA, nA)
         print("\nDecrypt and Verify")
-        print("Decrypt decrypt = c ^ eB mod nB = ", decrypt)
-        print("Verify verify_signature = signature ^ dA mod nA = ", verify_signature)
+        print("Decrypt decrypt = c ^ dB mod nB = ", decrypt)
+        print("Verify verify_signature = signature ^ eA mod nA = ", verify_signature)
         print("%s" % ("TRUE" if decrypt == verify_signature else "FALSE"))
         return(decrypt, decrypt == verify_signature)
 
-    verify(c, signature, dA, nA, eB, nB)
+    verify(c, signature, eA, nA, dB, nB)
 
 
 if __name__ == '__main__':
